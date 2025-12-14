@@ -35,6 +35,8 @@ body {
 
 .header {
   align-self: stretch;
+  /* background-color: yellow; */
+  border-bottom: 2px solid orange;
 }
 
 .header h1 {
@@ -176,6 +178,11 @@ body {
 
 .btn:hover {
   background-color: #e9bb24;
+}
+
+.footer {
+  text-align: center;
+  font-size: 14px;
 }
 
 /*
