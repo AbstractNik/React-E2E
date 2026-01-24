@@ -2,6 +2,10 @@ import "./App.css";
 import { useState } from "react";
 // import Flashcards from "./Flashcard";
 import Counter from "./Counter";
+import Logo from "./components/Logo";
+import Form from "./components/Form";
+import PackingList from "./components/PackingList";
+import Stats from "./components/Stats";
 
 const initialItems = [
   { id: 1, description: "Passports", quantity: 2, packed: false },
@@ -27,6 +31,19 @@ export default function App() {
     );
   }
 
+  function handleClearItems() {
+    if (items.length === 0) {
+      window.alert("Nothing to clear! The list is already empty.");
+      return;
+    }
+    const confirmed = window.confirm(
+      "Are you sure you want to clear all items?"
+    );
+    if (confirmed) {
+      setItems([]);
+    }
+  }
+
   return (
     <div className="app">
       <Logo />
@@ -35,142 +52,12 @@ export default function App() {
         items={items}
         onDeleteItem={handleDeleteItem}
         onToggleItem={handleToggleItem}
+        onClearItems={handleClearItems}
       />
       <Stats items={items} />
       <hr />
       {/* <Flashcards /> */}
       {/* <Counter /> */}
     </div>
-  );
-}
-
-function Logo() {
-  return <h1>🌴 Far Away 💼</h1>;
-}
-
-function Form({ onAddItems }) {
-  // 1. Create the state
-  const [description, setDescription] = useState("");
-  const [quantity, setQuantity] = useState(1);
-
-  function handleSubmit(e) {
-    e.preventDefault();
-
-    if (!description) return;
-
-    // Creating a new object with the controlled state values
-    const newItem = { description, quantity, packed: false, id: Date.now() };
-    console.log(newItem);
-    onAddItems(newItem);
-    // Resetting form state after submission
-    setDescription("");
-    setQuantity(1);
-  }
-
-  return (
-    <form className="add-form" onSubmit={handleSubmit}>
-      <h3>What do you need for your trip?</h3>
-
-      {/* 2 & 3. Bind value and handle onChange for Select */}
-      <select
-        value={quantity}
-        onChange={(e) => setQuantity(Number(e.target.value))}
-      >
-        {Array.from({ length: 20 }, (_, i) => i + 1).map((num) => (
-          <option value={num} key={num}>
-            {num}
-          </option>
-        ))}
-      </select>
-
-      {/* 2 & 3. Bind value and handle onChange for Input */}
-      <input
-        type="text"
-        placeholder="Item..."
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-      />
-      <button>Add</button>
-    </form>
-  );
-}
-
-function PackingList({ items, onDeleteItem, onToggleItem }) {
-  const [sortBy, setSortBy] = useState("input"); // 1. Create State
-  // 2. Derive Sorted Items
-  let sortedItems;
-
-  if (sortBy === "input") sortedItems = items;
-  if (sortBy === "description")
-    sortedItems = items
-      .slice()
-      .sort((a, b) => a.description.localeCompare(b.description));
-  if (sortBy === "packed")
-    sortedItems = items
-      .slice()
-      .sort((a, b) => Number(b.packed) - Number(a.packed));
-  return (
-    <div className="list">
-      <ul>
-        {sortedItems.map((item) => (
-          <Item
-            item={item}
-            key={item.id}
-            onDeleteItem={onDeleteItem}
-            onToggleItem={onToggleItem}
-          />
-        ))}
-      </ul>
-      <div className="actions">
-        <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
-          <option value="input">Sort by input order</option>
-          <option value="description">Sort by description</option>
-          <option value="packed">Sort by packed status</option>
-        </select>
-      </div>
-    </div>
-  );
-}
-
-function Item({ item, onDeleteItem, onToggleItem }) {
-  return (
-    <li>
-      <input
-        type="checkbox"
-        name="packed"
-        checked={item.packed}
-        onChange={() => onToggleItem(item.id)}
-      />
-      <span style={item.packed ? { textDecoration: "line-through" } : {}}>
-        {item.quantity} {item.description}
-      </span>
-      <button onClick={() => onDeleteItem(item.id)}>❌</button>
-    </li>
-  );
-}
-
-function Stats({ items }) {
-  // 1. Early Return for empty state
-  if (!items.length)
-    return (
-      <p className="stats">
-        <em>Start adding some items to your packing list! 🚀</em>
-      </p>
-    );
-
-  // 2. Derived State (calculated every render)
-  const numItems = items.length;
-  const numPacked = items.filter((item) => item.packed).length;
-  const percentage = Math.round((numPacked / numItems) * 100);
-
-  return (
-    <footer className="stats">
-      {/* 3. Conditional Rendering using Ternary Operator */}
-      <em>
-        {percentage === 100
-          ? "You got everything! Ready to go ✈️"
-          : `💼 You have ${numItems} items on your list, and you already packed ${numPacked} (${percentage}%)`}
-      </em>
-    </footer>
   );
 }
