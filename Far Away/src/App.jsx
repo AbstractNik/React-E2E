@@ -7,6 +7,8 @@ import Form from "./components/Form";
 import PackingList from "./components/PackingList";
 import Stats from "./components/Stats";
 import Accordion from "./components/Accordion";
+import AccordionV2 from "./components/AccordionV2";
+import AccordionItemV2 from "./components/AccordionItemV2";
 
 const initialItems = [
   { id: 1, description: "Passports", quantity: 2, packed: false },
@@ -78,7 +80,32 @@ export default function App() {
       />
       <Stats items={items} />
       <hr />
+      <h2>Accordion V1 (Multiple Open)</h2>
       <Accordion items={accordionData} />
+      <hr />
+      <h2>Accordion V2 (Single Open - Composition Pattern)</h2>
+      <AccordionV2>
+        <AccordionItemV2 id={1} title="Where are these chairs assembled?">
+          <p>
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+            Accusantium, quaerat temporibus quas dolore provident nisi ut
+            aliquid ratione beatae sequi aspernatur veniam repellendus.
+          </p>
+        </AccordionItemV2>
+        <AccordionItemV2 id={2} title="How long do I have to return my chair?">
+          <div>
+            <p>Pariatur recusandae dignissimos fuga voluptas unde optio nesciunt commodi beatae, explicabo natus.</p>
+            <ul>
+              <li>30 days return policy</li>
+              <li>Free return shipping</li>
+            </ul>
+          </div>
+        </AccordionItemV2>
+        <AccordionItemV2 id={3} title="Do you ship to countries outside the EU?">
+          <p>Yes, we ship to many countries outside the EU. Please check our shipping policy for more details.</p>
+          <button>Check Shipping</button>
+        </AccordionItemV2>
+      </AccordionV2>
       {/* <Flashcards /> */}
       {/* <Counter /> */}
     </div>
